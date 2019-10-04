@@ -1,7 +1,8 @@
-/* 
+/*
 Solves the SSSP problem for graphs with nonzero integer weights
 using a version of the Bellman-Ford algorithm
 Author: Eric Aubanel
+Edited by Jackson Dunn
 Date: September 2018
 */
 
@@ -13,7 +14,7 @@ int readGraphWeighted(int n, int m, int graph[]);
 int main(){
   int n, m;
   scanf("%d %d",&n, &m);
-  int graph[n*n];
+  int graph[n][n];
   if(readGraphWeighted(n, m, graph) == 1){
 	  printf("invalid input\n");
 	  return 1;
@@ -31,6 +32,12 @@ int main(){
   int front = 0; //index of start of list
   int size = 1; //size of list (has source vertex initially)
 
+  //an array of pointers that will point to the start of each row
+  int *pointerArr[n];
+  for(int i=0; i<n; i++){
+    pointerArr[i] = &graph[i][0];
+  }
+
   int D[n], P[n];
   for(int i=0; i <n; i++){
 	 D[i] = INT_MAX;
@@ -47,7 +54,7 @@ int main(){
     size--;
     inQueue[i] = 0;
     for(int j=0; j<n; j++){
-      int w = graph[i*n+j];
+      int w = graph[i][n+j];
       if(w == 0)
         continue;
 		  if(D[j] > D[i] + w){
